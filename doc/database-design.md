@@ -1,0 +1,76 @@
+### User
+- id
+- email
+- password
+- name
+- role
+- createdAt
+- updatedAt
+
+### Room
+- id
+- roomNumber
+- floor
+- status
+- monthlyRent
+- createdAt
+- updateAt
+### status
+- AVAILABLE
+- OCCUPIED
+- MAINTENANCE
+
+### Tenant
+- id
+- firstName
+- lastName
+- phone
+- email
+- idCard
+- birthDate
+
+### Lease
+- id
+- roomId
+- tenantId
+- startDate
+- endDate
+- deposit
+- monthlyRent
+- status
+### Status
+- ACTIVE
+- EXPIRED
+- TERMINATED
+
+### UtilityBill
+- id
+- leaseId
+- waterPrevious
+- waterCurrent
+- electricPrevious
+- waterPrice
+- electricPrise
+- month
+- year
+
+### Invoice
+- id 
+- leaseId
+- utilityBillId
+- rentAmount
+- waterAmount
+- electricAmount
+- totalAmount
+- status
+### Status
+- PENDING
+- PAID
+- OVERDUE
+
+### Payment
+- id
+- invoiceId
+- amount
+- paymentMethod
+- paidAt
