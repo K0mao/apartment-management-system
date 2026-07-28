@@ -11,37 +11,167 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String @id @default(cuid())
+  email     String @unique
   password  String
   firstName String
   lastName  String
-  role      Role     @default(ADMIN)
+  role      Role   @default(ADMIN)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Apartment{
-  id          String   @id @default(cuid())
+model Apartment {
+  id          String  @id @default(cuid())
   name        String
   address     String
   phone       String?
   description String?
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   rooms Room[]
 }
 
-model Room{
-  id          String   @id @default(cuid())
+model Room {
+  id          String     @id @default(cuid())
   roomNumber  String
-  
+  floor       Int
+  status      RoomStatus @default(AVAILABLE)
+  monthlyRent Float
   apartmentId String
-  apartment   Apartment @relation(fields: [apartmentId], references: [id])
-  
+  apartment   Apartment  @relation(fields: [apartmentId], references: [id], onDelete: Cascade)
+
+  leases Lease[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([roomNumber, apartmentId])
+}
+
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+model Tenant {
+  id        String    @id @default(cuid())
+  firstName String
+  lastName  String
+  phone     String
+  email     String?
+  idCard    String?
+  birthDate DateTime?
+
+  leases Lease[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum LeaseStatus {
+  ACTIVE
+  EXPIRED
+  TERMINATED
+}
+
+model Lease {
+  id String @id @default(cuid())
+
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id])
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
+
+  startDate DateTime
+  endDate   DateTime?
+
+  deposit     Int
+  monthlyRent Int
+
+  status LeaseStatus @default(ACTIVE)
+
+  utilityBills UtilityBill[]
+  invoice      Invoice[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model UtilityBill {
+  id String @id @default(cuid())
+
+  leaseId String
+  lease   Lease  @relation(fields: [leaseId], references: [id])
+
+  waterPrevious Int
+  waterCurrent  Int
+
+  electricPrevious Int
+  electricCurrent  Int
+
+  waterPrice    Int
+  electricPrice Int
+
+  month Int
+  year  Int
+
+  invoice Invoice?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Invoice {
+  id String @id @default(cuid())
+
+  leaseId String
+  lease   Lease  @relation(fields: [leaseId], references: [id])
+
+  utilityBillId String      @unique
+  utilityBill   UtilityBill @relation(fields: [utilityBillId], references: [id])
+
+  rentAmount     Int
+  waterAmount    Int
+  electricAmount Int
+  totalAmount    Int
+
+  status InvoiceStatus @default(PENDING)
+
+  payments Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  OVERDUE
+}
+
+model Payment {
+  id String @id @default(cuid())
+
+  invoiceId String
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+
+  amount Int
+
+  paymentMethod PaymentMethod
+
+  paidAt DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  QR_PAYMENT
 }
