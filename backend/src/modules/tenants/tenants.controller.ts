@@ -5,7 +5,9 @@ import { UpdateTenantDto } from './dto/update-tenant.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
-
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+@ApiTags('Tenants')
+@ApiBearerAuth()
 @Controller('tenants')
 @UseGuards(JwtAuthGuard)
 export class TenantsController {

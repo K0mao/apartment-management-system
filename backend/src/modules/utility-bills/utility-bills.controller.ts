@@ -4,7 +4,9 @@ import { CreateUtilityBillDto } from './dto/create-utility-bill.dto';
 import { UpdateUtilityBillDto } from './dto/update-utility-bill.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
-
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+@ApiTags('Utility-bills')
+@ApiBearerAuth()
 @Controller('utility-bills')
 @UseGuards(JwtAuthGuard)
 export class UtilityBillsController {

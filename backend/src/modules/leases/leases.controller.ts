@@ -4,7 +4,9 @@ import { CreateLeaseDto } from './dto/create-lease.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { UpdateLeaseDto } from './dto/update-lease.dto';
-
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+@ApiTags('Leases')
+@ApiBearerAuth()
 @Controller('leases')
 @UseGuards(JwtAuthGuard)
 export class LeasesController {

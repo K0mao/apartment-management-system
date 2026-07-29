@@ -3,7 +3,9 @@ import { ApartmentService } from './apartment.service';
 import { CreateApartmentDto } from './dto/create-apartment.dto';
 import { UpdateApartmentDto } from './dto/update-apartment.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+@ApiTags('Apartment')
+@ApiBearerAuth()
 @Controller('apartments')
 @UseGuards(JwtAuthGuard)
 export class ApartmentController {

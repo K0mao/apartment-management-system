@@ -3,7 +3,9 @@ import { InvoicesService } from './invoices.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+@ApiTags('Invoices')
+@ApiBearerAuth()
 @Controller('invoices')
 @UseGuards(JwtAuthGuard)
 export class InvoicesController {
